@@ -6,8 +6,8 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from django.http.response import JsonResponse
 
-from EmployeeApp.models import Departments,Employees,Recruiters
-from EmployeeApp.serializers import DepartmentSerializer,EmployeeSerializer, RecruitSerializer
+from EmployeeApp.models import Departments,Employees,Recruiters,Developers,Bookspace
+from EmployeeApp.serializers import DepartmentSerializer,EmployeeSerializer, RecruitSerializer, DevelopersSerializer, BookspaceSerializer
 
 from django.core.files.storage import default_storage
 
@@ -38,7 +38,65 @@ def departmentApi(request,id=0):
         department=Departments.objects.get(DepartmentId=id)
         department.delete()
         return JsonResponse("Deleted Successfully",safe=False)
+@csrf_exempt       
+def hireApi(request,id=0):
+    if request.method=='GET':
+        hires = Developers.objects.all()
+        hires_serializer=DevelopersSerializer(hires,many=True)
+        return JsonResponse(hires_serializer.data,safe=False)
+    elif request.method=='POST':
+        hire_data=JSONParser().parse(request)
+        hires_serializer=DevelopersSerializer(data=hire_data)
+        if hires_serializer.is_valid():
+            hires_serializer.save()
+            return JsonResponse("Added Successfully",safe=False)
+        return JsonResponse("Failed to Add",safe=False)
+    elif request.method=='PUT':
+        hire_data=JSONParser().parse(request)
+        hire=Developers.objects.get(HiredeveloperId=hire_data['HiredeveloperId'])
+        hires_serializer=DevelopersSerializer(hire,data=hire_data)
+        if hires_serializer.is_valid():
+            hires_serializer.save()
+            return JsonResponse("Updated Successfully",safe=False)
+        return JsonResponse("Failed to Update")
+    elif request.method=='DELETE':
+        hire=Developers.objects.get(HiredeveloperId=id)
+        hire.delete()
+        return JsonResponse("Deleted Successfully",safe=False)
+    
+@csrf_exempt
+def SavenewFile(request):
+    file=request.FILES['UploadFile']
+    file_name=default_storage.save(file.name,file)
+    return JsonResponse(file_name,safe=True)
 
+@csrf_exempt       
+def bookspaceApi(request,id=0):
+    if request.method=='GET':
+        books = Bookspace.objects.all()
+        books_serializer=BookspaceSerializer(books,many=True)
+        return JsonResponse(books_serializer.data,safe=False)
+    elif request.method=='POST':
+        book_data=JSONParser().parse(request)
+        books_serializer=BookspaceSerializer(data=book_data)
+        if books_serializer.is_valid():
+            books_serializer.save()
+            return JsonResponse("Added Successfully",safe=False)
+        return JsonResponse("Failed to Add",safe=False)
+    elif request.method=='PUT':
+        book_data=JSONParser().parse(request)
+        book=Bookspace.objects.get(BookspaceId=book_data['BookspaceId'])
+        books_serializer=BookspaceSerializer(book,data=book_data)
+        if books_serializer.is_valid():
+            books_serializer.save()
+            return JsonResponse("Updated Successfully",safe=False)
+        return JsonResponse("Failed to Update")
+    elif request.method=='DELETE':
+        book=Bookspace.objects.get(BookspaceId=id)
+        book.delete()
+        return JsonResponse("Deleted Successfully",safe=False)
+   
+    
 @csrf_exempt       
 def recruitApi(request,id=0):
     if request.method=='GET':
