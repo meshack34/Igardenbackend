@@ -16,7 +16,7 @@ class RecruitSerializer(serializers.ModelSerializer):
 class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:
         model=Employees 
-        fields=('EmployeeId','FirstName','LastName','PhoneNumber','Email','otherdetails','PhotoFileName')
+        fields=('EmployeeId','mmmh','FirstName','LastName','PhoneNumber','Email','otherdetails','PhotoFileName')
 class DevelopersSerializer(serializers.ModelSerializer):
     class Meta:
         model=Developers 

@@ -20,6 +20,7 @@ class Recruiters(models.Model):
 
 class Employees(models.Model):
     EmployeeId = models.AutoField(primary_key=True)
+    mmmh = models.CharField(max_length=500, null=True,blank = True)
     FirstName = models.CharField(max_length=500, null=True,blank = True)
     LastName = models.CharField(max_length=500 , null=True,blank = True)
     PhoneNumber = models.CharField(max_length=250, null=True,blank = True)
